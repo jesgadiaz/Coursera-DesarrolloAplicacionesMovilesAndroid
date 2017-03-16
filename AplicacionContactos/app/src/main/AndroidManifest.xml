@@ -3,6 +3,7 @@
     package="com.anncode.recyclerviewfragments">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
@@ -19,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.anncode.aplicacioncontactos.DetalleContacto"></activity>
+        <activity android:name="com.anncode.aplicacioncontactos.configuser.ConfigUserActivity"></activity>
     </application>
 
 </manifest>
+

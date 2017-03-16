@@ -6,7 +6,7 @@
     <string name="pnombre">nombre</string>
     <string name="ptelefono">telefono</string>
     <string name="pemail">email</string>
-    <string name="plikes">0 Likes</string>
+    <string name="plikes">0</string>
     <string name="likes">Likes</string>
     <string name="titulo_paisaje_manana">Paisaje Campo Mañana</string>
 

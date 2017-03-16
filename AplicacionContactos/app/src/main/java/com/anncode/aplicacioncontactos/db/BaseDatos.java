@@ -60,11 +60,11 @@ public class BaseDatos extends SQLiteOpenHelper {
 
         while (registros.moveToNext()){
             Contacto contactoActual = new Contacto();
-            contactoActual.setId(registros.getInt(0));
-            contactoActual.setNombre(registros.getString(1));
-            contactoActual.setTelefono(registros.getString(2));
-            contactoActual.setEmail(registros.getString(3));
-            contactoActual.setFoto(registros.getInt(4));
+            //contactoActual.setId(registros.getInt(0));
+            //contactoActual.setNombre(registros.getString(1));
+            //contactoActual.setTelefono(registros.getString(2));
+            //contactoActual.setEmail(registros.getString(3));
+            //contactoActual.setFoto(registros.getInt(4));
 
             String queryLikes = "SELECT COUNT("+ConstantesBaseDatos.TABLE_LIKES_CONTACT_NUMERO_LIKES+") as likes " +
                                 " FROM " + ConstantesBaseDatos.TABLE_LIKES_CONTACT +

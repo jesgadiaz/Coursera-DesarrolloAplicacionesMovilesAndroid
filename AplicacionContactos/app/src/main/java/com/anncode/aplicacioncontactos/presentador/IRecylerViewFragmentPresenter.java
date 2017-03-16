@@ -5,7 +5,7 @@ package com.anncode.aplicacioncontactos.presentador;
  */
 public interface IRecylerViewFragmentPresenter {
 
-    public void obtenerContactos();
-
+    public void obtenerContactosBaseDatos();
+    void obtenerMediosRecientes();
     public void mostrarContactosRV();
 }

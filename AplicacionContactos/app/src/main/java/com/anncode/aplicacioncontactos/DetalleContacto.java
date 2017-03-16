@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anncode.recyclerviewfragments.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by anahisalgado on 19/04/16.
@@ -22,32 +23,44 @@ import com.anncode.recyclerviewfragments.R;
 public class DetalleContacto extends AppCompatActivity {
     private static final String KEY_EXTRA_URL = "url";
     private static final String KEY_EXTRA_LIKE = "like";
-    private TextView tvNombre;
-    private TextView tvTelefono;
-    private TextView tvEmail;
+    //private TextView tvNombre;
+    //private TextView tvTelefono;
+    //private TextView tvEmail;
+    private ImageView imgFotoDetalle;
+    private TextView tvLikesDetalle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalle_contacto);
+        setContentView(R.layout.activity_detalle_contacto_foto);
 
         Bundle extras      = getIntent().getExtras();
         String nombre      = extras.getString("nombre");
         String telefono    = extras.getString("telefono");
         String email       = extras.getString("email");
 
+        String url = extras.getString(KEY_EXTRA_URL);
+        int likes =  extras.getInt(KEY_EXTRA_LIKE);
 
-        tvNombre    = (TextView) findViewById(R.id.tvNombre);
-        tvTelefono  = (TextView) findViewById(R.id.tvTelefono);
-        tvEmail     = (TextView) findViewById(R.id.tvEmail);
+        //tvNombre    = (TextView) findViewById(R.id.tvNombre);
+        //tvTelefono  = (TextView) findViewById(R.id.tvTelefono);
+        //tvEmail     = (TextView) findViewById(R.id.tvEmail);
 
-        tvNombre.setText(nombre);
-        tvTelefono.setText(telefono);
-        tvEmail.setText(email);
+        tvLikesDetalle = (TextView) findViewById(R.id.tvLikesDetalle);
+        tvLikesDetalle.setText(String.valueOf(likes));
 
+        //tvNombre.setText(nombre);
+        //tvTelefono.setText(telefono);
+        //tvEmail.setText(email);
+        imgFotoDetalle = (ImageView) findViewById(R.id.imgFotoDetalle);
+        Picasso.with(this)
+                .load(url)
+                .placeholder(R.drawable.shock_rave_bonus_icon)
+                .into(imgFotoDetalle);
 
     }
 
+    /*
     public void llamar(View v) {
         String telefono = tvTelefono.getText().toString();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -72,4 +85,5 @@ public class DetalleContacto extends AppCompatActivity {
         emailIntent.setType("message/rfc822");
         startActivity(Intent.createChooser(emailIntent, "Email "));
     }
+    */
 }
