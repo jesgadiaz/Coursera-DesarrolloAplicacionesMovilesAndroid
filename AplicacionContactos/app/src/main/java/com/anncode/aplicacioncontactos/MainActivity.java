@@ -29,6 +29,7 @@ import com.anncode.recyclerviewfragments.R;
 import com.google.gson.Gson;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static int REQUEST_CODE = 0;
     private String newUser;
     private UserId userId;
+    int data_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +69,33 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Fragment> agregarFragments(){
         Log.e("MainActivity", "agregarFragments");
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new RecyclerViewFragment());
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("data_type", data_type);
+        bundle.putString("newUser", newUser);
+        RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+        recyclerViewFragment.setArguments(bundle);
+
+        /*if(data_type == 1 & !newUser.isEmpty()){
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentLL, recyclerViewFragment)
+                    .commit();
+        }*/
+
+        fragments.add(recyclerViewFragment);
         fragments.add(new PerfilFragment());
         return fragments;
     }
 
     private void setUpViewPager(){
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager(), agregarFragments()));
+        viewPager.getAdapter().notifyDataSetChanged();
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_contacts);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_name);
     }
-
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -110,69 +126,11 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==REQUEST_CODE)
         {
             newUser = data.getStringExtra("newUser");
-            obtenerUserId(newUser);
+            data_type = 1;
+            setUpViewPager();
         }
     }
 
-    public void obtenerUserId(String newUser) {
-        RestApiAdapter restApiAdapter = new RestApiAdapter();
-        Gson gsonUserId = restApiAdapter.construyeGsonDeserializadorUserId();
-        EndpointsApi endpointsApi = restApiAdapter.establecerConexionRestApiInstagram(gsonUserId);
-        String url = ConstantesRestApi.KEY_GET_USER_ID +
-                     ConstantesRestApi.KEY_USER_NAME + newUser +
-                     ConstantesRestApi.KEY_ACCESS_TOKEN_SECOND_POSITION +
-                     ConstantesRestApi.ACCESS_TOKEN;
-        Call<UserIdResponse> userIdResponseCall = endpointsApi.getUserId(url);
-        //Call<UserIdResponse> userIdResponseCall = endpointsApi.getUserId();
-        userIdResponseCall.enqueue(new Callback<UserIdResponse>() {
-            @Override
-            public void onResponse(Call<UserIdResponse> call, Response<UserIdResponse> response) {
-                UserIdResponse userIdResponse = response.body();
-                userId = userIdResponse.getUserId();
-                setUpViewPager();
-                loadImages();
-                //mostrarContactosRV();
-            }
-
-            @Override
-            public void onFailure(Call<UserIdResponse> call, Throwable t) {
-                //Toast.makeText(this, "Falló la conexión", Toast.LENGTH_SHORT).show();
-                Log.i("FALLÖ LA CONEXIÖN", t.toString());
-            }
-        });
-    }
-
-    public void loadImages(){
-        RestApiAdapter restApiAdapter = new RestApiAdapter();
-        Gson gsonMediaRecent = restApiAdapter.construyeGsonDeserializadorMediaRecent();
-        EndpointsApi endpointsApi = restApiAdapter.establecerConexionRestApiInstagram(gsonMediaRecent);
-        String url = ConstantesRestApi.KEY_USERS + userId.getId().toString() + "/" +
-                ConstantesRestApi.KEY_MEDIA_RECENT +
-                ConstantesRestApi.KEY_ACCESS_TOKEN +
-                ConstantesRestApi.ACCESS_TOKEN;
-        Call<ContactoResponse> contactoResponseCall = endpointsApi.getUserImages(url);
-        contactoResponseCall.enqueue(new Callback<ContactoResponse>() {
-            @Override
-            public void onResponse(Call<ContactoResponse> call, Response<ContactoResponse> response) {
-                ContactoResponse contactoResponse = response.body();
-                ArrayList<Contacto> contactos = contactoResponse.getContactos();
-                /*
-                int index = viewPager.getCurrentItem();
-                PageAdapter adapter = ((PageAdapter) viewPager.getAdapter());
-                //RecyclerViewFragment recyclerViewFragment = (RecyclerViewFragment) adapter.getRegisteredFragment(index);
-                Fragment f = adapter.getItem(viewPager.getCurrentItem());
-                f.onCreate();
-                */
-                //mostrarContactosRV();
-            }
-
-            @Override
-            public void onFailure(Call<ContactoResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Falló la conexión", Toast.LENGTH_SHORT).show();
-                Log.i("FALLÖ LA CONEXIÖN", t.toString());
-            }
-        });
-
-    }
 
 }
+

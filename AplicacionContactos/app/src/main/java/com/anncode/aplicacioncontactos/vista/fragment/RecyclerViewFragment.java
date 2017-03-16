@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +27,36 @@ public class RecyclerViewFragment extends Fragment implements IRecyclerViewFragm
     private ArrayList<Contacto> contactos;
     private RecyclerView rvContactos;
     private IRecylerViewFragmentPresenter presenter;
+    int data_type;
+    String newUser;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_recyclerview, container, false);
-
         rvContactos = (RecyclerView) v.findViewById(R.id.rvContactos);
-        presenter = new RecyclerViewFragmentPresenter(this, getContext());
+        /*try{
+            data_type = getArguments().getInt("data_type");
+            newUser = getArguments().getString("newUser");
+        }catch(Exception e){
+            Log.i("ERROR CON BUNDLE", e.toString());
+        }*/
+        //presenter = new RecyclerViewFragmentPresenter(data_type, this, getContext());
         return v;
     }
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try{
+            Bundle bundle = getArguments();
+            data_type = bundle.getInt("data_type");
+            newUser = bundle.getString("newUser");
+        }catch(Exception e){
+            Log.i("ERROR CON BUNDLE", e.toString());
+            data_type = 0;
+        }
+        presenter = new RecyclerViewFragmentPresenter(newUser, data_type, this, getContext());
+    }
 
     /*
     public void inicializarDatos(){
